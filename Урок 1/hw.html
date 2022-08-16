@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="ru">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>1</title>
+	<link rel="stylesheet" href="css/bootstrap.min.css">
+	<link href="css/styles.css" rel="stylesheet">
+	<script src="js/vue.js"></script>
+</head>
+<body>
+	<div class="wrapper">
+		<div class="sample">
+			<form v-show="hasInput">
+				<div class="form-group" v-for="name in input">
+					<label> {{ name.label }} </label>
+					<input type="text" class="form-control" v-model.lazy="name.value">
+				</div>
+				...
+				<div class="form-group" >
+					<label>Guests</label>
+					<input type="button" class="btn btn-primary" value="+" @click="addGuest()">
+				</div>
+				<div class="form-group" v-for="(,i) in guests">
+					<label @dblclick="removeGuest()">Guest {{ i+1 }}</label>
+               <input type="text" class="form-control" v-model.lazy="guests[i]" >
+				</div>
+				<hr>
+				<button class="btn btn-success" :disabled="checkAllEmpty" @click.prevent="pushValues()">Send Data</button>
+			</form>
+			<div v-show="!hasInput">
+            
+				<h2>All done!</h2>
+				<table class="table table-bordered">
+					<tr v-for="value in output" >
+						<td> {{ value.label }} </td>
+						<td> {{ value.value }} </td>
+					</tr>
+					<tr v-show="!checkGusetsEmpty">
+						<td>Guests</td>
+						<td>
+							<p v-for="value in guestsOutput">{{ value }}</p>
+						</td>
+					</tr>
+				</table>
+			</div>
+		</div>
+	</div>
+	<script>
+		Vue.createApp({
+			data: () => ({
+				input: {
+               email: {
+                  label: 'Email',
+                  value: ''
+               },
+               phone: {
+                  label: 'Phone',
+                  value: ''
+               },
+               fname: {
+                  label: 'First Name',
+                  value: ''
+               },
+               lname: {
+                  label: 'Last Name',
+                  value: ''
+               },
+            },
+            guests: [],
+            output: {
+               email: {
+                  label: 'Email',
+                  value: ''
+               },
+               phone: {
+                  label: 'Phone',
+                  value: ''
+               },
+               fullName: {
+                  label: 'Full Name',
+                  value: ''
+               },
+            },
+            guestsOutput: []
+			}),
+         computed: {
+           hasInput() {
+               return this.output.email.value == '';
+            },
+            checkInput() {
+               for (let key in this.input) {
+                  if (this.input[key].value == '') {
+                     return true;
+                  }
+               }
+               return false;
+            },
+            checkGusets() {
+               return this.guests.includes('');
+            },
+            checkGusetsEmpty(){
+               return this.guests.length == 0;
+            },
+            checkAllEmpty() {
+               if (this.checkGusetsEmpty) {
+                  return this.checkInput;
+               } else if (!this.checkInput && !this.checkGusets) {
+                  return false;
+               } else {
+                  return true
+               }
+            }
+         },
+         methods: {
+            addGuest() {
+               this.guests.push('');
+            },
+            removeGuest(i) {
+               this.guests.splice(i, 1);
+            },
+            pushValues() {
+               let original = this.input;
+               let result = this.output;
+
+               result.email.value = original.email.value;
+               result.phone.value = original.phone.value;
+               result.fullName.value = `${original.fname.value} ${original.lname.value}`;
+
+               this.guestsOutput = this.guests;
+            }
+         }
+		}).mount('.sample');
+	</script>
+</body>
+</html>
