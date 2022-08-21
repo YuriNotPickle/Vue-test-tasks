@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="ru">
+<head>
+	 <meta charset="UTF-8">
+	 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	 <title>1</title>
+	 <link rel="stylesheet" href="css/bootstrap.min.css">
+	 <link rel="stylesheet" href="css/font-awesome.min.css">
+	 <link href="css/styles.css" rel="stylesheet">
+	<style>
+		.content{
+			height: 300px;
+			overflow: auto;
+		}
+	</style>
+	 <script src="js/vue.js"></script>
+</head>
+<body>
+	<div class="wrapper">
+		<div class="sample">
+			<form>
+				<div class="content alert alert-info">
+					<p>This text no one reads. This text no one reads. This text no one reads.</p>
+					<p>This text no one reads. This text no one reads. This text no one reads.</p>
+					<p>This text no one reads. This text no one reads. This text no one reads.</p>
+					<p>This text no one reads. This text no one reads. This text no one reads.</p>
+					<p>This text no one reads. This text no one reads. This text no one reads.</p>
+					<p>This text no one reads. This text no one reads. This text no one reads.</p>
+					<p>This text no one reads. This text no one reads. This text no one reads.</p>
+					<p>This text no one reads. This text no one reads. This text no one reads.</p>
+					<p>This text no one reads. This text no one reads. This text no one reads.</p>
+					<p>This text no one reads. This text no one reads. This text no one reads.</p>
+					<p>This text no one reads. This text no one reads. This text no one reads.</p>
+					<p>This text no one reads. This text no one reads. This text no one reads.</p>
+					<p>This text no one reads. This text no one reads. This text no one reads.</p>
+					<p>This text no one reads. This text no one reads. This text no one reads.</p>
+					<p>This text no one reads. This text no one reads. This text no one reads.</p>
+					<p>This text no one reads. This text no one reads. This text no one reads.</p>
+					<p>This text no one reads. This text no one reads. This text no one reads.</p>
+					<p>This text no one reads. This text no one reads. This text no one reads.</p>
+					<p>This text no one reads. This text no one reads. This text no one reads.</p>
+					<p>This text no one reads. This text no one reads. This text no one reads.</p>
+				</div>
+				<div class="form-check">
+					<label class="form-check-label">
+						<input class="form-check-input" type="checkbox" v-model="agreeTerms"> 
+						Agree with all
+					</label>
+				</div>
+				<div class="form-check">
+               <div>
+					<label class="form-check-label">
+						<input class="form-check-input" type="checkbox" v-model="spam.agree"> 
+						Get spam
+					</label>
+               </div>
+               <div v-if="spam.agree">
+                  <label class="form-check-label">
+                     <input class="form-check-input" type="radio" value="email" v-model="spam.deliveryType"> 
+                     E-mail
+                  </label>   
+               </div>
+               <div v-if="spam.agree">
+                  <label class="form-check-label">
+                     <input class="form-check-input" type="radio" value="sms" v-model="spam.deliveryType"> 
+                     SMS
+                  </label>
+               </div>
+            </div>
+				<hr>
+				<button class="btn btn-primary" :disabled="!agreeTerms">
+					Send Data
+				</button>
+			</form>
+			<div>
+				<table class="table table-bordered">
+					<tr>
+						<td>Agree all</td>
+						<td> {{ agreeTerms }} </td>
+					</tr>
+               <tr>
+						<td>Get Spam</td>
+						<td> {{ spam.agree }} </td>
+					</tr>
+               <tr v-if="spam.agree">
+						<td>Get Spam</td>
+						<td> {{ spam.deliveryType }} </td>
+					</tr>
+				</table>
+			</div> 
+		</div>
+	</div>
+	<script>
+		
+		Vue.createApp({
+			data: () => ({
+               agreeTerms: 'false',
+               spam: {
+                  agree: 'false',
+                  deliveryType: ''
+               },
+			}),
+         computed: {
+            checkChecked() {
+               
+            }
+         }
+		}).mount('.sample');
+
+	</script>
+</body>
+</html>
