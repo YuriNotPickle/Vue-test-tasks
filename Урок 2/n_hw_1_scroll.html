@@ -68,7 +68,7 @@
                </div>
             </div>
 				<hr>
-				<button class="btn btn-primary" :disabled="!agreeTerms">
+				<button class="btn btn-primary" :disabled="!agreeTerms" @click.prevent>
 					Send Data
 				</button>
 			</form>
@@ -83,7 +83,7 @@
 						<td> {{ spam.agree }} </td>
 					</tr>
                <tr v-if="spam.agree">
-						<td>Get Spam</td>
+						<td>Spam Type</td>
 						<td> {{ spam.deliveryType }} </td>
 					</tr>
 				</table>
@@ -94,17 +94,15 @@
 		
 		Vue.createApp({
 			data: () => ({
-               agreeTerms: 'false',
+               agreeTerms: false,
                spam: {
-                  agree: 'false',
-                  deliveryType: ''
+                  agree: false,
+                  deliveryType: 'sms',
                },
 			}),
          computed: {
-            checkChecked() {
-               
-            }
-         }
+
+         },
 		}).mount('.sample');
 
 	</script>
