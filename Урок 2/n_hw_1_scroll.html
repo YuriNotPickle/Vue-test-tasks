@@ -19,7 +19,7 @@
 	<div class="wrapper">
 		<div class="sample">
 			<form>
-				<div class="content alert alert-info">
+				<div @scroll="scrolledBottom()" ref="overflowText" class="content alert alert-info">
 					<p>This text no one reads. This text no one reads. This text no one reads.</p>
 					<p>This text no one reads. This text no one reads. This text no one reads.</p>
 					<p>This text no one reads. This text no one reads. This text no one reads.</p>
@@ -41,6 +41,7 @@
 					<p>This text no one reads. This text no one reads. This text no one reads.</p>
 					<p>This text no one reads. This text no one reads. This text no one reads.</p>
 				</div>
+				{{ scrolledBottom() }}
 				<div class="form-check">
 					<label class="form-check-label">
 						<input class="form-check-input" type="checkbox" v-model="agreeTerms"> 
@@ -71,6 +72,7 @@
 				<button class="btn btn-primary" :disabled="!agreeTerms" @click.prevent>
 					Send Data
 				</button>
+
 			</form>
 			<div>
 				<table class="table table-bordered">
@@ -101,10 +103,22 @@
                },
 			}),
          computed: {
-
          },
+         methods: {
+           scrolledBottom() {
+             this.$nextTick(() => {
+               let div = this.$refs.overflowText;
+               if (Math.floor(div.scrollHeight - div.scrollTop) == div.clientHeight) {
+  return true
+} else {
+  return 'false';
+}
+             })
+             
+          }
+         }
 		}).mount('.sample');
-
+  
 	</script>
 </body>
 </html>
