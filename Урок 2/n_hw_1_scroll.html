@@ -19,7 +19,7 @@
 	<div class="wrapper">
 		<div class="sample">
 			<form v-if="!showTable">
-				<div @scroll="scrolledBottom()" ref="overflowText" class="content alert alert-info">
+				<div @scroll.passive="scrolledBottom" class="content alert alert-info">
 					<p>This text no one reads. This text no one reads. This text no one reads.</p>
 					<p>This text no one reads. This text no one reads. This text no one reads.</p>
 					<p>This text no one reads. This text no one reads. This text no one reads.</p>
@@ -44,7 +44,7 @@
             <div class="progress">
                <div class="progress-bar" role="progressbar" aria-label="Basic example" :aria-valuenow="scrollbarCount" aria-valuemin="0" aria-valuemax="100" :style="{width: scrollbarCount + '%'}"></div>
              </div>	
-            <div v-show="checkScrolled" class="test">			
+            <template v-if="checkScrolled">	
 				<div class="form-check">
 					<label class="form-check-label">
 						<input class="form-check-input" type="checkbox" v-model="agreeTerms"> 
@@ -58,34 +58,36 @@
 						Get spam
 					</label>
                </div>
-               <div v-if="spam.agree">
+               <template v-if="spam.agree">
+               <div>
                   <label class="form-check-label">
                      <input class="form-check-input" type="radio" value="email" v-model="spam.deliveryType"> 
                      E-mail
                   </label>   
                </div>
-               <div v-if="spam.agree">
+               <div>
                   <label class="form-check-label">
                      <input class="form-check-input" type="radio" value="sms" v-model="spam.deliveryType"> 
                      SMS
                   </label>
                </div>
+            </template>
             </div>
 				<hr>
 				<button @click="showTable = !showTable" class="btn btn-primary" :disabled="!agreeTerms" @click.prevent>
 					Send Data
 				</button>
-         </div>
+         </template>		
 			</form>
-			<div v-if="showTable">
+			<div v-else>
 				<table class="table table-bordered">
 					<tr>
 						<td>Agree all</td>
-						<td :class="termsAgreeColor"> {{ agreeTerms == true ? 'Yes' : 'No' }} </td>
+						<td :class="termsAgreeColor"> {{ agreeTerms ? 'Yes' : 'No' }} </td>
 					</tr>
                <tr>
-						<td>Get Spam</td>
-						<td :class="spamAgreeColor"> {{ spam.agree == true ? 'Yes' : 'No' }} </td>
+                  <td>Get Spam</td>
+						<td :class="spamAgreeColor"> {{ spam.agree ? 'Yes' : 'No' }} </td>
 					</tr>
                <tr v-if="spam.agree">
 						<td>Spam Type</td>
@@ -127,12 +129,10 @@
             }
          },
          methods: {
-            scrolledBottom() {
-             this.$nextTick(() => {
-               let div = this.$refs.overflowText;
+            scrolledBottom(e) {
+               let div = e.target;
                this.scroll.total = div.scrollHeight - div.clientHeight;
                if (this.scroll.toTop < Math.ceil(div.scrollTop)) this.scroll.toTop = Math.ceil(div.scrollTop);
-             })
              
           }
          }
