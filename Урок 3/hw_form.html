@@ -18,7 +18,7 @@
 				</div>
 				<div>
                
-               <app-field v-for="field in info" :label='field.label' :pattern='field.pattern'  @send-value="field.value = $event" @send-status="field.status = $event">  </app-field>
+               <app-field v-for="field,i in info" :key="i" :label='field.label' :pattern='field.pattern'  @send-value="field.value = $event" @send-status="field.status = $event">  </app-field>
 					<!-- <div class="form-group" v-for="field,i in info">
 						<label>
 							{{ field.label }}
@@ -46,7 +46,7 @@
 		</div>
 	 </div>
 	<script>
-		let AppField = {
+		const AppField = {
          template: `
          <div class="form-group" >
 						<label> 
