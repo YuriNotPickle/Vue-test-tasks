@@ -12,12 +12,14 @@
 <body>
 	 <div class="wrapper">
 		  <div class="sample">
-			<form>
+			<form @submit.prevent v-show="!this.formSent">
 				<div class="progress">
-					<div class="progress-bar"></div>
+					<div class="progress-bar" :style="progressStyles"></div>
 				</div>
 				<div>
-					<div class="form-group" v-for="field,i in info">
+               
+               <app-field v-for="field in info" :label='field.label' :pattern='field.pattern'  @send-value="field.value = $event" @send-status="field.status = $event">  </app-field>
+					<!-- <div class="form-group" v-for="field,i in info">
 						<label>
 							{{ field.label }}
 							<span v-if="field.activated"
@@ -25,71 +27,127 @@
 							></span>
 						</label>
 						<input type="text" class="form-control" :value="field.value" @input="onInput(i, $event.target.value)">
-					</div>
+					</div> -->
 				</div>
-				<button class="btn btn-primary">
+				<button class="btn btn-primary" :disabled="isBtnDisabled" @click.once="formSent = true">
 					Send Data
 				</button>
 			</form>
 			<pre>
-				{{ info }}
 			</pre>
 			<div>
-				<table class="table table-bordered">
-					<tr>
-						<td></td>
-						<td></td>
+				<table class="table table-bordered" v-show="this.formSent">
+					<tr v-for="field in info">
+						<td>{{ field.label }}</td>
+						<td> {{ field.value }} </td>
 					</tr>
 				</table>
 			</div>
 		</div>
 	 </div>
 	<script>
-		
+		let AppField = {
+         template: `
+         <div class="form-group" >
+						<label> 
+							{{ label }}
+							<span
+								:class="symbol"
+							></span>
+						</label>
+						<input type="text" class="form-control"  v-model="this.value" @input="$emit('send-value', this.value)" @input="$emit('send-status', this.checkValidation)">
+					</div>
+         `,
+         props: {
+            label: { type: String, required: true },
+            pattern: { type: RegExp, required: true },
+         },
+         data() {
+            return {
+               value: '',
+               activationStatus: false,
+            }
+         },
+         computed: {
+            checkValidation() {
+               return this.pattern.test(this.value.trim())
+            },
+            symbol() {
+               if(this.checkActivation()) return this.checkValidation ? 'fa fa-check-circle text-success' : 'fa fa-exclamation-circle text-danger';
+            },
+         },
+         methods: {
+            checkActivation() {
+               if (this.value.length > 1) {
+                  this.activationStatus = true;
+               };
+               return this.activationStatus;
+            }
+         }
+      }
 		Vue.createApp({
+         components: {
+            AppField,
+         },
+
 			data: () => ({
 				info: [
 					{
 						label: 'Name',
 						value: '',
-						pattern: /^[a-zA-Z ]{2,30}$/
+						pattern: /^[a-zA-Z ]{2,30}$/,
+                  status: false,
 					},
 					{
 						label: 'Phone',
 						value: '',
-						pattern: /^[0-9]{7,14}$/
+						pattern: /^[0-9]{7,14}$/,
+                  status: false,
 					},
 					{
 						label: 'Email',
 						value: '',
-						pattern: /.+/
+						pattern: /.+/,
+                  status: false,
 					},
 					{
 						label: 'Some Field 1',
 						value: '',
-						pattern: /.+/
+						pattern: /.+/,
+                  status: false,
 					},
 					{
 						label: 'Some Field 2',
 						value: '',
-						pattern: /.+/
+						pattern: /.+/,
+                  status: false,
 					}
-				]
+				],
+            formSent: false,
 			}),
-			methods: {
-				onInput(i, val){
-					let field = this.info[i];
-					field.value = val.trim();
-					field.activated = true;
-					field.valid = field.pattern.test(field.value);
-				}
-			},
-			created(){
-				this.info.forEach(field => {
-					field.valid = false;
-					field.activated = false;
-				})
-			}
+         computed: {
+            getCurrent() {
+               let current = 0;
+               this.info.forEach(element => {
+                  if (element.status) {
+                     current += 1
+                  }
+               });
+               return current
+            },
+            getTotal() {
+               return this.info.length;
+            },
+            getPercent() {
+               return this.getCurrent / this.getTotal * 100
+            },
+            progressStyles() {
+               return { width: this.getPercent + '%'  }
+            },
+            isBtnDisabled() {
+               return this.getPercent === 100 ? false : true
+            }
+         },
 		}).mount('.sample');
 	</script>
 </body>
