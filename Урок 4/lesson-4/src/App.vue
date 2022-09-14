@@ -2,9 +2,7 @@
 	 <div class="wrapper">
 		  <div class="sample">
 			<form @submit.prevent v-show="!this.formSent">
-				<div class="progress">
-					<div class="progress-bar" :style="progressStyles"></div>
-				</div>
+				<app-progress :percent="this.getPercent" />
 				<div>
                <app-field v-for="field,i in info" :key="i" :label='field.label' :pattern='field.pattern'  @send-value="componentAction($event, field)" />  
 				</div>
@@ -27,12 +25,13 @@
 </template>
 
 <script>
-import AppField from './components/AppField.vue'
-
+import AppField from './components/Field.vue'
+import AppProgress from "./components/Progress.vue"
 export default {
   name: 'App',
   components: {
             AppField,
+            AppProgress,
          },
 			data: () => ({
 				info: [
@@ -84,9 +83,6 @@ export default {
             },
             getPercent() {
                return this.getCurrent / this.getTotal * 100
-            },
-            progressStyles() {
-               return { width: this.getPercent + '%'  }
             },
             isBtnDisabled() {
                return this.getPercent === 100 ? false : true
