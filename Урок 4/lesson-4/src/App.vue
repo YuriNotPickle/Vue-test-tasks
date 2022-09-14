@@ -1,15 +1,4 @@
-<!doctype html>
-<html lang="ru">
-<head>
-	 <meta charset="UTF-8">
-	 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-	 <title>1</title>
-	 <link rel="stylesheet" href="css/bootstrap.min.css">
-	 <link rel="stylesheet" href="css/font-awesome.min.css">
-	 <link href="css/styles.css" rel="stylesheet">
-	 <script src="js/vue.js"></script>
-</head>
-<body>
+<template>
 	 <div class="wrapper">
 		  <div class="sample">
 			<form @submit.prevent v-show="!this.formSent">
@@ -17,7 +6,7 @@
 					<div class="progress-bar" :style="progressStyles"></div>
 				</div>
 				<div>
-               <app-field v-for="field,i in info" :key="i" :label='field.label' :pattern='field.pattern'  @send-value="field.value = $event" @send-status="field.status = $event">  </app-field>
+               <app-field v-for="field,i in info" :key="i" :label='field.label' :pattern='field.pattern'  @send-value="componentAction($event, field)" />  
 				</div>
 				<button class="btn btn-primary" :disabled="isBtnDisabled" @click.once="formSent = true">
 					Send Data
@@ -35,51 +24,16 @@
 			</div>
 		</div>
 	 </div>
-	<script>
-		const AppField = {
-         template: `
-         <div class="form-group" >
-						<label> 
-							{{ label }}
-							<span
-								:class="symbol"
-							></span>
-						</label>
-						<input type="text" class="form-control"  v-model="this.value" @input="$emit('send-value', this.value)" @input="$emit('send-status', this.checkValidation)">
-					</div>
-         `,
-         props: {
-            label: { type: String, required: true },
-            pattern: { type: RegExp, required: true },
-         },
-         data() {
-            return {
-               value: '',
-               activationStatus: false,
-            }
-         },
-         computed: {
-            checkValidation() {
-               return this.pattern.test(this.value.trim())
-            },
-            symbol() {
-               if(this.checkActivation()) return this.checkValidation ? 'fa fa-check-circle text-success' : 'fa fa-exclamation-circle text-danger';
-            },
-         },
-         methods: {
-            checkActivation() {
-               if (this.value.length > 1) {
-                  this.activationStatus = true;
-               };
-               return this.activationStatus;
-            }
-         }
-      }
-		Vue.createApp({
-         components: {
+</template>
+
+<script>
+import AppField from './components/AppField.vue'
+
+export default {
+  name: 'App',
+  components: {
             AppField,
          },
-
 			data: () => ({
 				info: [
 					{
@@ -138,7 +92,15 @@
                return this.getPercent === 100 ? false : true
             }
          },
-		}).mount('.sample');
-	</script>
-</body>
-</html>
+         methods: {
+            componentAction(e, field) {
+               field.value = e[0];
+               field.status = e[1]
+            }
+         },
+         }
+</script>
+
+<style>
+
+</style>
