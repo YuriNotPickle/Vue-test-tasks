@@ -1,8 +1,8 @@
 <template>
 	 <div class="wrapper">
 		  <div class="sample">
-			<form @submit.prevent v-show="!this.formSent">
-				<app-progress :percent="this.getPercent" />
+			<form @submit.prevent v-show="!formSent">
+				<app-progress :percent="getPercent" />
 				<div>
                <app-field v-for="field,i in info" :key="i" :label='field.label' :pattern='field.pattern'  @send-value="componentAction($event, field)" />  
 				</div>
@@ -12,8 +12,8 @@
 			</form>
 			<pre>
 			</pre>
-			<div>
-				<table class="table table-bordered" v-show="this.formSent">
+			<div class="t-body">
+				<table class="table table-bordered" v-show="formSent">
 					<tr v-for="field in info">
 						<td>{{ field.label }}</td>
 						<td> {{ field.value }} </td>
@@ -69,6 +69,17 @@ export default {
             formSent: false,
 			}),
          computed: {
+            getTotal() {
+               return this.info.length;
+            },
+            getPercent() {
+               return this.getCurrent() / this.getTotal * 100
+            },
+            isBtnDisabled() {
+               return this.getPercent === 100 ? false : true
+            }
+         },
+         methods: {
             getCurrent() {
                let current = 0;
                this.info.forEach(element => {
@@ -78,17 +89,6 @@ export default {
                });
                return current
             },
-            getTotal() {
-               return this.info.length;
-            },
-            getPercent() {
-               return this.getCurrent / this.getTotal * 100
-            },
-            isBtnDisabled() {
-               return this.getPercent === 100 ? false : true
-            }
-         },
-         methods: {
             componentAction(e, field) {
                field.value = e[0];
                field.status = e[1]

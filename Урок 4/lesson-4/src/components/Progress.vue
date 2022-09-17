@@ -1,6 +1,6 @@
 <template>
 	<div class="progress">
-		<div class="progress-bar" :style="this.progressStyles"></div>
+		<div class="progress-bar" :style="progressStyles"></div>
 	</div>
 </template>
 <script>

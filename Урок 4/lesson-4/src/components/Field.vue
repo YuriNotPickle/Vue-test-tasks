@@ -3,10 +3,9 @@
       <div class="form-group" >
 			<label> 
 				{{ label }} 
-            <font-awesome-icon v-show="this.output" v-if="this.symbol" icon="fa-solid fa-circle-check" color="green" />
-            <font-awesome-icon v-show="this.output" v-else-if="!this.symbol" icon="fa-solid fa-circle-exclamation" color="red" />
+            <font-awesome-icon v-show="output" :icon="symbol" :color="color" />
 			</label>
-			<input type="text" class="form-control"  v-model="this.value" @input="$emit('send-value', [this.value, this.checkValidation])">
+			<input type="text" class="form-control"  v-model="value" @input="$emit('send-value', [value, checkValidation])">
 		</div>
    </div>
 </template>
@@ -31,7 +30,10 @@ export default {
                return this.pattern.test(this.value.trim())
             },
             symbol() {
-               if(this.checkActivation()) return this.checkValidation ? true : false;
+               if(this.checkActivation()) return this.checkValidation ? 'fa-solid fa-circle-check' : 'fa-solid fa-circle-exclamation';
+            },
+            color() {
+               if(this.checkActivation()) return this.checkValidation ? 'green' : 'red';
             },
             output() {
                return this.activationStatus ? true : false
