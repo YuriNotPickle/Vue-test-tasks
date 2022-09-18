@@ -2,30 +2,22 @@
 	<div class="form-group">
 		<label>
 			{{ label }}
-            <transition name="rotate" mode="out-in">
-                  <fa-icon v-if="valid && activated"
-                  class="text-success"
-                  icon="check-circle"
-                  />
-                  <fa-icon v-else-if="!valid && activated"
-                  class="text-danger"
-                  icon="exclamation-circle"
-                  />
-         </transition>
+               <transition v-if="activated" name="rotate" mode="out-in" 
+               appear appear-active-class="fade">
+                     <fa-icon 
+                     :key="valid"
+                     :class="valid ? 'text-success' : 'text-danger'"
+                     :icon="valid ? 'check-circle' : 'exclamation-circle'"
+                     />
+               </transition>
 		</label>
 		<input type="text" class="form-control" :value="value" @input="onInput">
 	</div>
 </template>
 <style>
 
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity .3s ease;
-}
-
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
+.fade {
+  animation: fade .3s ;
 }
 
 .rotate-enter-active {
@@ -41,6 +33,10 @@
   100% {
    transform: rotateY(0deg);
   }
+}
+@keyframes fade {
+   from { opacity: 0; }
+   to { opacity: 1; }
 }
 </style>
 <script>
