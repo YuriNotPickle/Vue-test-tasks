@@ -17,34 +17,34 @@
 			</button>
 		</form>
 		<div v-else>
-         <h1>All done</h1>
+			<h2>All done</h2>
 		</div>
+		<vue-final-modal v-model="showModal">
+			<div class="container p-2 mt-4 modal-inner">
+				<table class="table table-bordered">
+					<tbody>
+						<tr v-for="field,i in info" :key="i">
+							<td>{{ field.label }}</td>
+							<td>{{ field.value }}</td>
+						</tr>
+					</tbody>
+				</table>
+				<hr>
+				<button class="btn btn-success" @click="onConfirm">
+					Ok
+				</button>
+				<button class="btn btn-danger" @click="showModal = false">
+					Cancel
+				</button>
+			</div>
+		</vue-final-modal>
 	</div>
-   <vue-final-modal 
-   v-model="showModal"
-   :name="null"
-   classes="modal-container" content-class="modal-content"
-   >
-      <h2>Is all correct?</h2>
-      <table class="table table-bordered wzz50">
-			<tbody>
-				<tr v-for="field,i in info" :key="i">
-					<td>{{ field.label }}</td>
-					<td>{{ field.value }}</td>
-				</tr>
-			</tbody>
-		</table>
-      <div class="modal__action">
-        <button @click="modalSuccess()" class="btn btn-success">Confirm</button>
-        <button @click="modalFail()" class="btn btn-danger">Cancel</button>
-      </div>
-    </vue-final-modal>
 </template>
 
 <script>
 import AppField from './components/Field'
 import AppProgress from './components/Progress'
-import { VueFinalModal } from 'vue-final-modal'
+import { VueFinalModal } from 'vue-final-modal';
 
 export default {
 	components: { AppField, AppProgress, VueFinalModal },
@@ -76,8 +76,8 @@ export default {
 				pattern: /.+/
 			}
 		],
-		formDone: false,
-      showModal: false
+		showModal: false,
+		formDone: false
 	}),
 	computed: {
 		fieldDone(){
@@ -90,16 +90,9 @@ export default {
 		progressStyles(){
 			let rel = this.fieldDone / this.info.length * 100;
 			return { width: rel + '%' };
-		},
+		}
 	},
 	methods: {
-      modalSuccess() {
-         this.formDone = true;
-         this.showModal = false;
-      },
-      modalFail() {
-         this.showModal = false;
-      },
 		onUpdate(i, val){
 			let field = this.info[i];
 			field.value = val.trim();
@@ -109,6 +102,10 @@ export default {
 			if(this.formReady){
 				this.showModal = true;
 			}
+		},
+		onConfirm(){
+			this.showModal = false;
+			this.formDone = true;
 		}
 	},
 	created(){
@@ -118,32 +115,8 @@ export default {
 	}
 }
 </script>
-<style scoped>
-   ::v-deep .modal-container {
-     display: flex;
-     justify-content: center;
-     align-items: center;
-   }
-   ::v-deep .modal-content {
-     display: flex;
-     justify-content: center;
-     align-items: center;
-     flex-direction: column;
-     width: auto;
-     min-width: 30%;
-     margin: 0 1rem;
-     padding: 1rem;
-     border: 1px solid #e2e8f0;
-     border-radius: 0.25rem;
-     background: #fff;
-   }
-   .modal__title {
-     font-size: 1.5rem;
-     font-weight: 700;
-   }
-   .modal__action {
-      display: flex;
-      width: 100%;
-      justify-content: space-evenly;
-   }
+<style>
+ .modal-inner{
+	 background: #fff;
+ }
 </style>
