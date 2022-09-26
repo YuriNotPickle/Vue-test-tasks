@@ -90,8 +90,8 @@ const store = {
       }
 	},
 	actions: {
-      increase(store, id){
-         store.commit('setCnt', [store.getters.products[id].cnt + 1, id])
+      increase({ commit, getters }, id){
+         commit('setCnt', [getters.products[id].cnt + 1, id])
       },
       decrease(store, id){
          store.commit('setCnt', [store.getters.products[id].cnt - 1, id])
