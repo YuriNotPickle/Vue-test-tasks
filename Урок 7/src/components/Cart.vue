@@ -46,7 +46,7 @@
             return this.currentProduct(id).price;
          },
          currentProduct(id) {
-            return this.$store.getters['products/currentProduct'](id)[0]
+            return this.$store.getters['products/currentProduct'](id)
          },
          ...mapActions('cart', [ 'remove', 'addOnePc', 'removeOnePc' ]),
       },

@@ -7,7 +7,7 @@ export default {
 	getters: {
 		inCart: state => id => state.items.some(item => item.id == id),
 		length: state => state.items.length,
-      currentProd: (state, getters, rootState, rootGetters) => id => rootGetters['products/currentProduct'](id)[0],
+      currentProd: (state, getters, rootState, rootGetters) => id => rootGetters['products/currentProduct'](id),
       total: (state, getters) => {
          let total = 0;
          state.items.forEach( item => total+= getters.currentProd(item.id).price * item.cnt)
@@ -24,7 +24,7 @@ export default {
 			state.items = state.items.filter(item => item.id != id);
 		},
       setCnt(state, value){
-         const updatedItem = state.items.filter(current => current.id == value[1])[0];
+         const updatedItem = state.items.find(current => current.id == value[1]);
          updatedItem.cnt = value[0];
 
          if(updatedItem.cnt <= 0) {

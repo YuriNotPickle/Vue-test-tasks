@@ -29,9 +29,7 @@ const routes = [
 		path: '/product/:id',
 		component: AppProduct,
       beforeEnter: (to) => {
-         const id = parseInt(to.params.id);
-         const localProd = productStore.getters.all(productStore.state);
-         const exists = localProd.some(product => product.id === id);
+         const exists = productStore.getters.all(productStore.state).some(product => product.id == to.params.id);
          
          if(!exists) return { name: 'not-found' }
       }

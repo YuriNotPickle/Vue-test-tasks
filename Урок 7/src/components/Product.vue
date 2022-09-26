@@ -1,11 +1,11 @@
 <template>
-	<div v-if="currentProduct(routeId)">
-		<h1>{{ currentProduct(routeId)[0].title }}</h1>
+	<div >
+		<h1>{{ currentProduct(routeId).title }}</h1>
       <router-link :to="{ name: 'catalog' }">Back to products</router-link>
 		
 		<hr>
 		<div class="alert alert-success">
-			Price: {{ currentProduct(routeId)[0].price }}
+			Price: {{ currentProduct(routeId).price }}
 		</div>
       <button v-if="inCart(routeId)" @click="remove(routeId)" type="button" class="btn btn-danger">
 			Remove
@@ -15,7 +15,6 @@
 			Add to cart
 		</button>
 	</div>
-   <div v-else ></div>
 </template>
 
 <script>

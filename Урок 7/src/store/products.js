@@ -5,7 +5,7 @@ export default {
 	},
 	getters: {
 		all: state => state.items,
-      currentProduct: state => id => state.items.filter(item => item.id == id),
+      currentProduct: state => id => state.items.find(item => item.id == id),
 	},
 	mutations: {
 		
